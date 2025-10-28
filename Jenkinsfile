@@ -11,7 +11,7 @@ pipeline {
         ACR_LOGIN_SERVER = 'springbootproject1.azurecr.io'
         FULL_IMAGE_NAME = "${ACR_LOGIN_SERVER}/${IMAGE_NAME}:${IMAGE_TAG}"
         RG = 'harit-rg'
-        AKS_NAME = 'demo-aks'
+        AKS_NAME = 'demo-aks' 
     }
     stages {
         stage('Checkout from Git') {
