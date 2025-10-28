@@ -10,7 +10,7 @@ pipeline {
         ACR_NAME = 'springbootproject1'
         ACR_LOGIN_SERVER = 'springbootproject1.azurecr.io'
         FULL_IMAGE_NAME = "${ACR_LOGIN_SERVER}/${IMAGE_NAME}:${IMAGE_TAG}"
-        RG = 'demo-rg'
+        RG = 'harit-rg'
         AKS_NAME = 'demo-aks'
     }
     stages {
@@ -58,63 +58,63 @@ pipeline {
                 }
             }
         }
-        // stage('Docker Build') {
-        //     steps {
-        //         script {
-        //             echo 'Building Docker Image.........'
-        //             docker.build ("${IMAGE_NAME}:${IMAGE_TAG}")
-        //         }
-        //     }
-        // }
-        // stage('Azure Login TO ACR') {
-        //     steps {
-        //         withCredentials([usernamePassword(credentialsId: 'azure-jenkins', passwordVariable: 'AZURE_PASSWORD', usernameVariable: 'AZURE_USERNAME')]) {
-        //             script {   
-        //                 echo 'Azure Login Started........'
-        //                 sh '''
-        //                 az login --service-principal -u $AZURE_USERNAME -p $AZURE_PASSWORD --tenant $TENET_ID
-        //                 az acr login --name $ACR_NAME
-        //             '''
-        //             }
-        //         }
-        //     }
-        // }
-        // stage('Docker Push to ACR') {
-        //     steps {
-        //         script {
-        //             echo 'Pushing Docker Image to ACR........'
-        //             sh '''
-        //                 docker tag ${IMAGE_NAME}:${IMAGE_TAG} ${FULL_IMAGE_NAME}
-        //                 docker push ${FULL_IMAGE_NAME}
-        //             '''
-        //         }
-        //     }
-        // }
-        // stage('Azure Login To AKS') {
-        //     steps {
-        //         withCredentials([usernamePassword(credentialsId: 'azure-jenkins', passwordVariable: 'AZURE_PASSWORD', usernameVariable: 'AZURE_USERNAME')]) {
-        //             script {   
-        //                 echo 'Azure Login Started to AKS'
-        //                 sh '''
-        //                 az login --service-principal -u $AZURE_USERNAME -p $AZURE_PASSWORD --tenant $TENET_ID
-        //                 az aks get-credentials --resource-group $RG --name $AKS_NAME --overwrite-existing
-        //             '''
-        //             }
-        //         }
-        //     }
-        // }
-        // stage('Deploy to AKS') {
-        //     steps {
-        //         withCredentials([usernamePassword(credentialsId: 'azure-jenkins', passwordVariable: 'AZURE_PASSWORD', usernameVariable: 'AZURE_USERNAME')]) {
-        //             script {
-        //                 echo 'Deploying Application to AKS........'
-        //                 sh '''
-        //                     az login --service-principal -u $AZURE_USERNAME -p $AZURE_PASSWORD --tenant $TENET_ID
-        //                     kubectl apply -f k8s/sprinboot-deployment.yaml
-        //                 '''
-        //             }
-        //         }
-        //     }
-        // }
+        stage('Docker Build') {
+            steps {
+                script {
+                    echo 'Building Docker Image.........'
+                    docker.build ("${IMAGE_NAME}:${IMAGE_TAG}")
+                }
+            }
+        }
+        stage('Azure Login TO ACR') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'azure-jenkins', passwordVariable: 'AZURE_PASSWORD', usernameVariable: 'AZURE_USERNAME')]) {
+                    script {   
+                        echo 'Azure Login Started........'
+                        sh '''
+                        az login --service-principal -u $AZURE_USERNAME -p $AZURE_PASSWORD --tenant $TENET_ID
+                        az acr login --name $ACR_NAME
+                    '''
+                    }
+                }
+            }
+        }
+        stage('Docker Push to ACR') {
+            steps {
+                script {
+                    echo 'Pushing Docker Image to ACR........'
+                    sh '''
+                        docker tag ${IMAGE_NAME}:${IMAGE_TAG} ${FULL_IMAGE_NAME}
+                        docker push ${FULL_IMAGE_NAME}
+                    '''
+                }
+            }
+        }
+        stage('Azure Login To AKS') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'azure-jenkins', passwordVariable: 'AZURE_PASSWORD', usernameVariable: 'AZURE_USERNAME')]) {
+                    script {   
+                        echo 'Azure Login Started to AKS'
+                        sh '''
+                        az login --service-principal -u $AZURE_USERNAME -p $AZURE_PASSWORD --tenant $TENET_ID
+                        az aks get-credentials --resource-group $RG --name $AKS_NAME --overwrite-existing
+                    '''
+                    }
+                }
+            }
+        }
+        stage('Deploy to AKS') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'azure-jenkins', passwordVariable: 'AZURE_PASSWORD', usernameVariable: 'AZURE_USERNAME')]) {
+                    script {
+                        echo 'Deploying Application to AKS........'
+                        sh '''
+                            az login --service-principal -u $AZURE_USERNAME -p $AZURE_PASSWORD --tenant $TENET_ID
+                            kubectl apply -f k8s/sprinboot-deployment.yaml
+                        '''
+                    }
+                }
+            }
+        }
     }
 }
