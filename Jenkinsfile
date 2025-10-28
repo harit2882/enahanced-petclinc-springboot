@@ -51,13 +51,13 @@ pipeline {
                 echo 'Packaging Successful'
             }
         }
-        // stage('Sonar Quality Gate') {
-        //     steps {
-        //         timeout(time: 1, unit: 'MINUTES') {
-        //            waitForQualityGate abortPipeline: false, credentialsId: 'sonar'
-        //         }
-        //     }
-        // }
+        stage('Sonar Quality Gate') {
+            steps {
+                timeout(time: 1, unit: 'MINUTES') {
+                   waitForQualityGate abortPipeline: false, credentialsId: 'sonar'
+                }
+            }
+        }
         // stage('Docker Build') {
         //     steps {
         //         script {
