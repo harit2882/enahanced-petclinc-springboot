@@ -16,7 +16,7 @@ pipeline {
     stages {
         stage('Checkout from Git') {
             steps {
-                git branch: 'prod', url: 'https://github.com/harit2882/project-1.git'
+                git branch: 'prod', url: 'https://github.com/harit2882/enahanced-petclinc-springboot.git'
             }
         }
         stage('Validate with Maven') {
